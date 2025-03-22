@@ -11,33 +11,51 @@
     rows equ 4
     col equ 3
 
+; Macros para pintar un pixel en la pantalla
+pinta_pixel macro x, y, color
+    mov ah, 0Ch          ; Función de BIOS para pintar un píxel
+    mov al, color       
+    mov bh, 00h          ; Página de pantalla (0)
+    mov cx, x           
+    mov dx, y            
+    int 10h              
+endm
+
 .code 
+
 getMatrixData:
-    
+    ; [Entrada fila y columna con push: primero columna y luego fila]
+    ; [Salida en dx: 0 o 1]
+
+    ; Limpiar registros
+    xor ax, ax
 
     ; Cargar byte de la fila en al
     mov al, col
+
+    ; Obtener direccion de la matriz
+    pop cx
     mul cl
     pop bx
     add ax, bx
     mov bx, ax
+
+    ; Obtener el bit de la matriz
     mov al, [matrix + bx]
 
     ; Hacer AND para obtener el bit deseado
     and al, 1
 
-    inc cx
-    push 1
+    
+    push 1 ; Columna
+    push 1 ; Fila
     jmp getMatrixData 
-
 
     ; Si es 0, entonces el bit es 0
     jz bit0
 
     ; Si es 1, entonces el bit es 1
     mov dx, 1
-
-    add cl, 1
     ret
     
 bit0:
@@ -45,10 +63,13 @@ bit0:
     mov dx, 0
     ret
 
-printbit:
-    ; Imprimir el bit
-    mov ah, 02h
-    int 21h
+generateMap:
+    
+
+ui:
+    mov ah, 00h
+    mov al, 12h
+    int 10h
     ret
 
 start:
@@ -56,10 +77,13 @@ start:
     mov ds, ax
 
     ; Indices (se modifican previo a la llamada)
-    mov cl, 0 ; Fila
     push 1 ; Columna
+    push 0 ; Fila
+    
 
     ; Llamada a la funcion
+    call ui
+    pinta_pixel 1, 1, 0Ah
     jmp getMatrixData
     call printbit
 
