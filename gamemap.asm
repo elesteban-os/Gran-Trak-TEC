@@ -1,54 +1,67 @@
 .model small
+.stack 100h
 
 .data
     ; Generacion de mapa del juego con una matriz de bits 
-    matrix db 00110011b,
-              00111000b,
-              11001100b,
-              10101010b
+    matrix db 1, 1, 1
+           db 1, 0, 1
+           db 0, 1, 0
+           db 0, 0, 0
     
     rows equ 4
-    col equ 8
-
-.bss
-    ; Para obtener un dato de la matriz
-    matrixResult resb 1
+    col equ 3
 
 .code 
 getMatrixData:
-    ; Indices (se modifican previo a la llamada)
-    mov esi, 2 ; Fila
-    mov edi, 3 ; Columna
+    
 
     ; Cargar byte de la fila en al
-    mov al, [matrix + esi]
-    
-    ; Crear mascara para obtener el bit deseado
-    mov bl, 1
-    shl bl, edi
+    mov al, col
+    mul cl
+    pop bx
+    add ax, bx
+    mov bx, ax
+    mov al, [matrix + bx]
 
     ; Hacer AND para obtener el bit deseado
-    and al, bl
+    and al, 1
+
+    inc cx
+    push 1
+    jmp getMatrixData 
+
 
     ; Si es 0, entonces el bit es 0
     jz bit0
 
     ; Si es 1, entonces el bit es 1
-    mov [matrixResult], 1
+    mov dx, 1
+
+    add cl, 1
     ret
     
 bit0:
     ; Accion cuando el bit es 0
-    mov [matrixResult], 0
+    mov dx, 0
     ret
 
-
-section .text
-    global _start
+printbit:
+    ; Imprimir el bit
+    mov ah, 02h
+    int 21h
+    ret
 
 start:
+    mov ax, @data
+    mov ds, ax
+
+    ; Indices (se modifican previo a la llamada)
+    mov cl, 0 ; Fila
+    push 1 ; Columna
+
     ; Llamada a la funcion
-    jz getMatrixData
+    jmp getMatrixData
+    call printbit
 
     ; Salir del programa
     mov ah, 4Ch
