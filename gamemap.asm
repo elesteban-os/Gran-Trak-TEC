@@ -3,17 +3,21 @@
 
 .data
     ; Generacion de mapa del juego con una matriz de bits 
-    matrix db 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-           db 1, 0, 1
-           db 0, 1, 0
-           db 0, 0, 0
+    matrix db 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1
+           db 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1
+           db 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1
+           db 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1
     
     rows equ 4
-    col equ 3
+    col equ 11
 
     ; Variables para la generacion de mapa
     xMap dw 0
     yMap dw 0
+    x2Map dw 0
+    y2Map dw 0
+    xMatrix dw 0
+    yMatrix dw 0    
 
 ; Macros para pintar un pixel en la pantalla
 pinta_pixel macro x, y, color
@@ -62,6 +66,22 @@ draw_rectangle macro x1, y1, x2, y2, color
         jle p_vert_rightLine
 endm
 
+rellenar_rectangulo macro x1, y1, x2, y2, color 
+        LOCAL f_line, f_pixel
+        mov dx, y1
+    f_line:
+        mov cx, x1
+    f_pixel:
+        pinta_pixel cx, dx, color
+        inc cx
+        cmp cx, x2
+        jle f_pixel
+
+        inc dx
+        cmp dx, y2
+        jle f_line
+endm
+
 
 .code 
 
@@ -76,8 +96,8 @@ getMatrixData:
     mov al, col
 
     ; Obtener direccion de la matriz
-    mov bx, cx
-    mul bx
+    mov bl, cl
+    mul bl
     mov bx, dx
     add ax, bx
     mov bx, ax
@@ -93,8 +113,9 @@ getMatrixData:
 
     ; Si es 1, entonces el bit es 1
     mov dx, 1
-
+    
     ret
+    ;jmp generateMap_cont ;;;
 bit0:
     ; Accion cuando el bit es 0
     mov dx, 0
@@ -103,31 +124,65 @@ bit0:
 generateMap:
     mov xMap, 0
     mov yMap, 0
+    mov xMatrix, 0
+    mov yMatrix, 0 
     jmp generateMap_cont
 
+generateMap_newY:
+    ; Incrementar yMap
+    add yMap, 3
+    inc yMatrix
+    mov xMap, 0
+    mov xMatrix, 0
+
+    ; Verificar si se ha terminado de recorrer la matriz
+    cmp yMatrix, rows
+    je loopp
+
+    ; Si no, llamar a generateMap_cont para seguir pintando
+    jmp generateMap_cont
+
+loopp:
+    jmp loopp
+
 generateMap_cont:  
-    mov cx, xMap
-    mov dx, yMap
+    mov dx, xMatrix
+    mov cx, yMatrix
+    ;jmp getMatrixData ;;;;
     call getMatrixData
 
     ; Pintar segun el dato
     cmp dx, 1
     je paintWhiteBox
+
+    jmp generateMap_cont1
     
-    inc xMap
+    
+   
+generateMap_cont1:  
+    add xMap, 3
+    inc xMatrix
+
+    ; Verificar si llego al final de la fila
+    cmp xMatrix, col
+    je generateMap_newY
+
+    ; Si no, llamar a generateMap_cont para seguir pintando
     jmp generateMap_cont
 
-    ; Verificar si se ha terminado de recorrer la matriz
-
-    ; Si no, llamar a generateMap_cont
 
 paintWhiteBox:
     ; Pintar caja blanca
-    pinta_pixel xMap, yMap, 0Fh
-    
-    ; Incrementar indices
-    inc xMap
-    jmp generateMap_cont
+    mov bx, xMap
+    add bx, 3
+    mov x2Map, bx
+
+    mov bx, yMap
+    add bx, 3
+    mov y2Map, bx
+    rellenar_rectangulo xMap, yMap, x2Map, y2Map, 0Fh
+
+    jmp generateMap_cont1
 
 ui:
     mov ah, 00h
