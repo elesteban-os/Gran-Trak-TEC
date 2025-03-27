@@ -1,8 +1,8 @@
 .model small
 
-include gamedata.asm
+;include gamedata.asm
 include macros.asm
-.stack 100h
+
 
 .code 
 getMatrixData:
@@ -68,7 +68,7 @@ generateMap_newY:
     jmp generateMap_cont
 
 loopp:
-    jmp loopp
+    ret
 
 generateMap_cont:  
     mov dx, xMatrix
@@ -109,7 +109,7 @@ paintWhiteBox:
     add bx, 3
     mov y2Map, bx
     ;draw_rectangle xMap, yMap, x2Map, y2Map, 0Fh
-    rellenar_rectangulo xMap, yMap, x2Map, y2Map, 0Fh
+    fill_rectangle xMap, yMap, x2Map, y2Map, 0Fh
 
     jmp generateMap_cont1
 
@@ -122,26 +122,7 @@ paintYellowBox:
     mov bx, yMap
     add bx, 3
     mov y2Map, bx
-    rellenar_rectangulo xMap, yMap, x2Map, y2Map, 0Eh
+    fill_rectangle xMap, yMap, x2Map, y2Map, 0Eh
 
     jmp generateMap_cont1
 
-ui:
-    mov ah, 00h
-    mov al, 12h
-    int 10h
-    ret
-
-start:
-    mov ax, @data
-    mov ds, ax
-
-    ; Llamada a la funcion
-    call ui
-    jmp generateMap
-
-    ; Salir del programa
-    mov ah, 4Ch
-    int 21h
-
-end start

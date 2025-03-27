@@ -1,5 +1,31 @@
 
 .data
+    ; --------------------------------------------------------------------------------
+    ; variables
+    ; --------------------------------------------------------------------------------
+    ; Variables para almacenar las coordenadas del rectángulo
+    ; JUGADOR 1
+    J1_x1 dw 310
+    J1_x2 dw 320
+    J1_y1 dw 230
+    J1_y2 dw 240
+
+    ; JUGADOR 2
+    J2_x1 dw 310
+    J2_x2 dw 320
+    J2_y1 dw 250
+    J2_y2 dw 260
+
+    ; Variables para la dirección del movimiento
+    ;JUGADOR 1
+    J1_dx dw 1    ; Dirección X del jugador 1 (1 = derecha, -1 = izquierda)
+    J1_dy dw 0    ; Dirección Y del jugador 1 (1 = abajo, -1 = arriba)
+
+    ;JUGADOR 2
+    J2_dx dw 1    ; Dirección X del jugador 2
+    J2_dy dw 0    ; Dirección Y del jugador 2
+
+
     ; Variables para la generacion de mapa
     xMap dw 0
     yMap dw 0
