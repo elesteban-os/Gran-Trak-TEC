@@ -5,16 +5,16 @@
     ; --------------------------------------------------------------------------------
     ; Variables para almacenar las coordenadas del rectángulo
     ; JUGADOR 1
-    J1_x1 dw 310
-    J1_x2 dw 320
-    J1_y1 dw 230
-    J1_y2 dw 240
+    J1_x1 dw 320
+    J1_x2 dw 330
+    J1_y1 dw 380
+    J1_y2 dw 390
 
     ; JUGADOR 2
-    J2_x1 dw 310
-    J2_x2 dw 320
-    J2_y1 dw 250
-    J2_y2 dw 260
+    J2_x1 dw 320
+    J2_x2 dw 330
+    J2_y1 dw 400
+    J2_y2 dw 410
 
     ; Variables para la dirección del movimiento
     ;JUGADOR 1

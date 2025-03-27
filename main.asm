@@ -1,7 +1,7 @@
 .model small
 
 
-
+include matrixm.asm
 include gamedata.asm
 include macros.asm
 include gamemap.asm

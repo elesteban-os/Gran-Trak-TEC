@@ -15,6 +15,7 @@ main_loop:
     call check_keyboard
     
     jmp main_loop
+    
 
 ; --------------------------------------------------------------------------------
 ; verificación de si hay una tecla presionada flechas de dirección
