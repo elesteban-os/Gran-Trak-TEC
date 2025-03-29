@@ -107,6 +107,10 @@ move_right2:
     mov J2_dy, 0    ; Sin movimiento vertical
     ret
 
+
+
+
+
 ; --------------------------------------------------------------------------------
 ; procesos
 ; --------------------------------------------------------------------------------
@@ -125,9 +129,26 @@ move_player1 proc
     add J1_y1, ax
     add J1_y2, ax
 
+    ; Detectar si hay colisiones
+    mov player_n, 1
+
+    mov ax, J1_x1
+    add ax, 10
+    mov Jx, ax
+    
+    mov ax, J1_y1
+    add ax, 10
+    mov Jy, ax
+
+    collision1 J1_x1, J1_y1, player_n
+    collision1 Jx, J1_y1, player_n
+    collision1 J1_x1, Jy, player_n
+    collision1 J1_x2, J1_y2, player_n
+
     ; Dibujar en nueva posición
     draw_rectangle J1_x1, J1_y1, J1_x2, J1_y2, 0Ah
     fill_rectangle J1_x1, J1_y1, J1_x2, J1_y2, 0Ah
+    
     ret
 move_player1 endp
 
@@ -145,6 +166,22 @@ move_player2 proc
     mov ax, J2_dy
     add J2_y1, ax
     add J2_y2, ax
+
+    ; Detectar si hay colisiones
+    mov player_n, 2
+
+    mov ax, J2_x1
+    add ax, 10
+    mov Jx, ax
+    
+    mov ax, J2_y1
+    add ax, 10
+    mov Jy, ax
+
+    collision1 J2_x1, J2_y1, player_n
+    collision1 Jx, J2_y1, player_n
+    collision1 J2_x1, Jy, player_n
+    collision1 J2_x2, J2_y2, player_n
 
     ; Dibujar en nueva posición
     draw_rectangle J2_x1, J2_y1, J2_x2, J2_y2, 0Bh
