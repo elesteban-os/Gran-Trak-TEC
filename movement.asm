@@ -7,10 +7,18 @@ include macros.asm
 ; bucle principal del programa
 ; --------------------------------------------------------------------------------
 main_loop:
+    ; Pequeño delay
+    ;push cx
+    ;mov cx, 0FFFFh
+;delay_loop:
+    ;loop delay_loop
+    ;pop cx
     ; Mover jugador 1
     call move_player1
     ; Mover jugador 2
     call move_player2
+    ; Mover bot
+    call move_bot
     ; Verificar teclas
     call check_keyboard
     
@@ -150,6 +158,84 @@ move_player2 proc
     fill_rectangle J2_x1, J2_y1, J2_x2, J2_y2, 0Bh
     ret
 move_player2 endp
+
+; Procedimiento para mover el BOT 1
+move_bot proc
+    
+    ; Borrar posición actual
+    draw_rectangle B1_x1, B1_y1, B1_x2, B1_y2, 00h
+    fill_rectangle B1_x1, B1_y1, B1_x2, B1_y2, 00h
+
+    push ax               ; Guardar el registro ax para mantener el modo grafico
+
+    ; Verificar pista adelante (3 puntos a 15 píxeles de distancia)
+    ;mov ah, 0Dh          ; Función para leer pixel
+    ;mov bh, 0            ; Página de video
+    
+    ; Calcular posición adelante (centro del bot + dirección*15)
+    
+    mov cx, B1_x1
+    add cx, B1_x2
+    shr cx, 1            ; CX = centro X
+    mov dx, B1_y1
+    add dx, B1_y2
+    shr dx, 1            ; DX = centro Y
+
+    push dx              ; Guardar dx que contiene la posición Y (porque imul modifica dx)
+                         ; el resultado de imul se guarda en dx:ax parte alta y parte baja
+    mov ax, B1_dx
+    mov bx, 15
+    imul bx
+    add cx, ax           ; Añadir offset en X
+
+    mov ax, B1_dy 
+    imul bx
+    pop dx               ; Recuperar dx que contiene la posición Y
+    add dx, ax           ; Añadir offset en Y
+
+    ; Guardar el color original
+    mov ah, 0Dh          ; Función para leer pixel
+    mov bh, 0            ; Página de video
+    int 10h              ; Leer color del pixel
+    mov bl, al           ; Guardar el color en bl
+    
+    ; Restaurar el color original
+    mov ah, 0Ch          ; Función para escribir pixel
+    mov al, bl           ; Recuperar el color original
+    int 10h              ; Escribir el pixel
+
+    pop ax               ; Recuperar el registro ax para mantener el modo grafico
+
+    cmp bl, track_color  ; Comparar con el color de la pista
+    je bot_turn          ; Girar si no es el color de la pista
+
+    ; Mover en la dirección actual si todo está bien
+    mov ax, B1_dx
+    add B1_x1, ax
+    add B1_x2, ax
+    
+    mov ax, B1_dy
+    add B1_y1, ax
+    add B1_y2, ax
+    
+    jmp bot_draw
+
+bot_turn:
+    ; Girar 90 grados a la izquierda (rotación en sentido antihorario)
+    ; dx, dy = dy, -dx
+    
+    mov ax, B1_dx 
+    mov bx, B1_dy 
+    mov B1_dx, bx 
+    neg ax
+    mov B1_dy, ax 
+
+bot_draw:
+    ; Dibujar en nueva posición
+    draw_rectangle B1_x1, B1_y1, B1_x2, B1_y2, 0Ch
+    fill_rectangle B1_x1, B1_y1, B1_x2, B1_y2, 0Ch
+    ret
+move_bot endp
 
 ; --------------------------------------------------------------------------------
 ; finalización del programa
