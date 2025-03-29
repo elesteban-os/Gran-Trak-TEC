@@ -3,6 +3,8 @@
     ; --------------------------------------------------------------------------------
     ; variables
     ; --------------------------------------------------------------------------------
+    track_color equ 0Fh  ; Color de la pista (ajustar según el color usado)
+
     ; Variables para almacenar las coordenadas del rectángulo
     ; JUGADOR 1
     J1_x1 dw 310
@@ -16,11 +18,23 @@
     J2_y1 dw 0
     J2_y2 dw 10
 
-    ; BOT
+    ; BOT 1
     B1_x1 dw 380
     B1_x2 dw 390
     B1_y1 dw 400
     B1_y2 dw 410
+
+    ; BOT 2
+    B2_x1 dw 360
+    B2_x2 dw 370
+    B2_y1 dw 400
+    B2_y2 dw 410
+
+    ; BOT 3
+    B3_x1 dw 340
+    B3_x2 dw 350
+    B3_y1 dw 400
+    B3_y2 dw 410
 
     ; Variables para la dirección del movimiento
     ;JUGADOR 1
@@ -34,7 +48,14 @@
     ;BOT 1
     B1_dx dw 1    ; Dirección X del bot
     B1_dy dw 0    ; Dirección Y del bot
-    track_color equ 0Fh  ; Color de la pista (ajustar según el color usado)
+    
+    ;BOT 2
+    B2_dx dw 1    ; Dirección X del bot
+    B2_dy dw 0    ; Dirección Y del bot
+
+    ;BOT 3
+    B3_dx dw 1    ; Dirección X del bot
+    B3_dy dw 0    ; Dirección Y del bot
 
 
     ; Variables para la generacion de mapa

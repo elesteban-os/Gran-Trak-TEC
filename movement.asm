@@ -17,8 +17,10 @@ main_loop:
     call move_player1
     ; Mover jugador 2
     call move_player2
-    ; Mover bot
-    call move_bot
+    ; Mover bots
+    call move_bot1
+    call move_bot2
+    call move_bot3
     ; Verificar teclas
     call check_keyboard
     
@@ -160,7 +162,7 @@ move_player2 proc
 move_player2 endp
 
 ; Procedimiento para mover el BOT 1
-move_bot proc
+move_bot1 proc
     
     ; Borrar posición actual
     draw_rectangle B1_x1, B1_y1, B1_x2, B1_y2, 00h
@@ -168,10 +170,6 @@ move_bot proc
 
     push ax               ; Guardar el registro ax para mantener el modo grafico
 
-    ; Verificar pista adelante (3 puntos a 15 píxeles de distancia)
-    ;mov ah, 0Dh          ; Función para leer pixel
-    ;mov bh, 0            ; Página de video
-    
     ; Calcular posición adelante (centro del bot + dirección*15)
     
     mov cx, B1_x1
@@ -207,7 +205,7 @@ move_bot proc
     pop ax               ; Recuperar el registro ax para mantener el modo grafico
 
     cmp bl, track_color  ; Comparar con el color de la pista
-    je bot_turn          ; Girar si no es el color de la pista
+    je bot1_turn          ; Girar si no es el color de la pista
 
     ; Mover en la dirección actual si todo está bien
     mov ax, B1_dx
@@ -218,9 +216,9 @@ move_bot proc
     add B1_y1, ax
     add B1_y2, ax
     
-    jmp bot_draw
+    jmp bot1_draw
 
-bot_turn:
+bot1_turn:
     ; Girar 90 grados a la izquierda (rotación en sentido antihorario)
     ; dx, dy = dy, -dx
     
@@ -230,12 +228,162 @@ bot_turn:
     neg ax
     mov B1_dy, ax 
 
-bot_draw:
+bot1_draw:
     ; Dibujar en nueva posición
-    draw_rectangle B1_x1, B1_y1, B1_x2, B1_y2, 0Ch
-    fill_rectangle B1_x1, B1_y1, B1_x2, B1_y2, 0Ch
+    draw_rectangle B1_x1, B1_y1, B1_x2, B1_y2, 0Eh ;amarillo
+    fill_rectangle B1_x1, B1_y1, B1_x2, B1_y2, 0Eh
     ret
-move_bot endp
+move_bot1 endp
+
+; Procedimiento para mover el BOT 2
+move_bot2 proc
+    
+    ; Borrar posición actual
+    draw_rectangle B2_x1, B2_y1, B2_x2, B2_y2, 00h
+    fill_rectangle B2_x1, B2_y1, B2_x2, B2_y2, 00h
+
+    push ax               ; Guardar el registro ax para mantener el modo grafico
+
+    ; Calcular posición adelante (centro del bot + dirección*15)
+    
+    mov cx, B2_x1
+    add cx, B2_x2
+    shr cx, 1            ; CX = centro X
+    mov dx, B2_y1
+    add dx, B2_y2
+    shr dx, 1            ; DX = centro Y
+
+    push dx              ; Guardar dx que contiene la posición Y (porque imul modifica dx)
+                         ; el resultado de imul se guarda en dx:ax parte alta y parte baja
+    mov ax, B2_dx
+    mov bx, 15
+    imul bx
+    add cx, ax           ; Añadir offset en X
+
+    mov ax, B2_dy 
+    imul bx
+    pop dx               ; Recuperar dx que contiene la posición Y
+    add dx, ax           ; Añadir offset en Y
+
+    ; Guardar el color original
+    mov ah, 0Dh          ; Función para leer pixel
+    mov bh, 0            ; Página de video
+    int 10h              ; Leer color del pixel
+    mov bl, al           ; Guardar el color en bl
+    
+    ; Restaurar el color original
+    mov ah, 0Ch          ; Función para escribir pixel
+    mov al, bl           ; Recuperar el color original
+    int 10h              ; Escribir el pixel
+
+    pop ax               ; Recuperar el registro ax para mantener el modo grafico
+
+    cmp bl, track_color  ; Comparar con el color de la pista
+    je bot2_turn          ; Girar si no es el color de la pista
+
+    ; Mover en la dirección actual si todo está bien
+    mov ax, B2_dx
+    add B2_x1, ax
+    add B2_x2, ax
+    
+    mov ax, B2_dy
+    add B2_y1, ax
+    add B2_y2, ax
+    
+    jmp bot2_draw
+
+bot2_turn:
+    ; Girar 90 grados a la izquierda (rotación en sentido antihorario)
+    ; dx, dy = dy, -dx
+    
+    mov ax, B2_dx 
+    mov bx, B2_dy 
+    mov B2_dx, bx 
+    neg ax
+    mov B2_dy, ax 
+
+bot2_draw:
+    ; Dibujar en nueva posición
+    draw_rectangle B2_x1, B2_y1, B2_x2, B2_y2, 01h ;azul
+    fill_rectangle B2_x1, B2_y1, B2_x2, B2_y2, 01h
+    ret
+move_bot2 endp
+
+; Procedimiento para mover el BOT 3
+move_bot3 proc
+    
+    ; Borrar posición actual
+    draw_rectangle B3_x1, B3_y1, B3_x2, B3_y2, 00h
+    fill_rectangle B3_x1, B3_y1, B3_x2, B3_y2, 00h
+
+    push ax               ; Guardar el registro ax para mantener el modo grafico
+
+    ; Calcular posición adelante (centro del bot + dirección*15)
+    
+    mov cx, B3_x1
+    add cx, B3_x2
+    shr cx, 1            ; CX = centro X
+    mov dx, B3_y1
+    add dx, B3_y2
+    shr dx, 1            ; DX = centro Y
+
+    push dx              ; Guardar dx que contiene la posición Y (porque imul modifica dx)
+                         ; el resultado de imul se guarda en dx:ax parte alta y parte baja
+    mov ax, B3_dx
+    mov bx, 15
+    imul bx
+    add cx, ax           ; Añadir offset en X
+
+    mov ax, B3_dy 
+    imul bx
+    pop dx               ; Recuperar dx que contiene la posición Y
+    add dx, ax           ; Añadir offset en Y
+
+    ; Guardar el color original
+    mov ah, 0Dh          ; Función para leer pixel
+    mov bh, 0            ; Página de video
+    int 10h              ; Leer color del pixel
+    mov bl, al           ; Guardar el color en bl
+    
+    ; Restaurar el color original
+    mov ah, 0Ch          ; Función para escribir pixel
+    mov al, bl           ; Recuperar el color original
+    int 10h              ; Escribir el pixel
+
+    pop ax               ; Recuperar el registro ax para mantener el modo grafico
+
+    cmp bl, track_color  ; Comparar con el color de la pista
+    je bot3_turn          ; Girar si no es el color de la pista
+
+    ; Mover en la dirección actual si todo está bien
+    mov ax, B3_dx
+    add B3_x1, ax
+    add B3_x2, ax
+    
+    mov ax, B3_dy
+    add B3_y1, ax
+    add B3_y2, ax
+    
+    jmp bot3_draw
+
+bot3_turn:
+    ; Girar 90 grados a la izquierda (rotación en sentido antihorario)
+    ; dx, dy = dy, -dx
+    
+    mov ax, B3_dx 
+    mov bx, B3_dy 
+    mov B3_dx, bx 
+    neg ax
+    mov B3_dy, ax 
+
+bot3_draw:
+    ; Dibujar en nueva posición
+    draw_rectangle B3_x1, B3_y1, B3_x2, B3_y2, 05h ;morado
+    fill_rectangle B3_x1, B3_y1, B3_x2, B3_y2, 05h
+    ret
+move_bot3 endp
+
+
 
 ; --------------------------------------------------------------------------------
 ; finalización del programa
