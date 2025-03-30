@@ -6,6 +6,7 @@ include gamedata.asm
 include macros.asm
 include gamemap.asm
 include movement.asm
+;include laps.asm
 
 
 .code
@@ -23,6 +24,12 @@ start:
     int 10h               ; Llamada a la interrupción para establecer el modo gráfico
 
     call generateMap
+    mov Jx, 316
+    mov Jx1, 317
+    mov Jy, 376
+    mov Jy1, 443
+
+    fill_rectangle Jx, Jy, Jx1, Jy1, 08h
     jmp main_loop
 
     

@@ -140,10 +140,11 @@ move_player1 proc
     add ax, 10
     mov Jy, ax
 
-    collision1 J1_x1, J1_y1, player_n
-    collision1 Jx, J1_y1, player_n
-    collision1 J1_x1, Jy, player_n
-    collision1 J1_x2, J1_y2, player_n
+    ; Corregir lo de lappixel aqui
+    collision1 J1_x1, J1_y1, player_n, lappixel
+    collision1 Jx, J1_y1, player_n, lappixel
+    collision1 J1_x1, Jy, player_n, lappixel
+    collision1 J1_x2, J1_y2, player_n, lappixel
 
     ; Dibujar en nueva posición
     draw_rectangle J1_x1, J1_y1, J1_x2, J1_y2, 0Ah
@@ -178,10 +179,17 @@ move_player2 proc
     add ax, 10
     mov Jy, ax
 
+    ; Detectar colisiones
     collision1 J2_x1, J2_y1, player_n
     collision1 Jx, J2_y1, player_n
     collision1 J2_x1, Jy, player_n
     collision1 J2_x2, J2_y2, player_n
+
+    ; Detectar vueltas
+    mov lappixel, 1
+    lapDetection J2_x1, J2_y1, player_n
+    mov lappixel, 2
+    lapDetection J2_x2, J2_y2, player_n
 
     ; Dibujar en nueva posición
     draw_rectangle J2_x1, J2_y1, J2_x2, J2_y2, 0Bh
