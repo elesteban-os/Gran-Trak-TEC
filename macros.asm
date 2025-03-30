@@ -245,3 +245,4 @@ lapDetection1 macro JX, JY, PLAYER
         mov dx, 1
 
 endm
+

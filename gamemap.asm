@@ -6,7 +6,6 @@ include macros.asm
 
 .code 
 
-
 generateMap:
     mov xMap, 0
     mov yMap, 0

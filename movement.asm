@@ -13,6 +13,14 @@ main_loop:
 ;delay_loop:
     ;loop delay_loop
     ;pop cx
+    
+    ; Actualizar temporizador
+    call update_timer
+    
+    ; Verificar si el tiempo terminó
+    cmp ax, 1
+    je game_time_over
+    
     ; Mover jugador 1
     call move_player1
     ; Mover jugador 2
@@ -25,7 +33,12 @@ main_loop:
     call check_keyboard
     
     jmp main_loop
-    
+
+; El tiempo se ha acabado
+game_time_over:
+    call exit_video_mode
+    call show_end_screen
+    jmp end_program
 
 ; --------------------------------------------------------------------------------
 ; verificación de si hay una tecla presionada flechas de dirección
@@ -116,10 +129,6 @@ move_right2:
     mov J2_dx, 1    ; Mover hacia la derecha
     mov J2_dy, 0    ; Sin movimiento vertical
     ret
-
-
-
-
 
 ; --------------------------------------------------------------------------------
 ; procesos
