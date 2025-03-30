@@ -82,6 +82,8 @@
     xMatrix dw 0
     yMatrix dw 0  
 
+    track_color equ 0Fh ; Color de la pista
+
     ; Generacion de mapa del juego con una matriz de bits 
     rows equ 160
     col equ 213
