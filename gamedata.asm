@@ -11,7 +11,7 @@
     lapY dw 0
     lappixel dw 0
     lapcheckpoint dw 0, 0, 0, 0, 0
-    lapcounter dw 1, 2, 6, 4, 5
+    lapcounter dw 0, 0, 0, 0, 0
     Playeer dw 1
 
     ; --------------------------------------------------------------------------------

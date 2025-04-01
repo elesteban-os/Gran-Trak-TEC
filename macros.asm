@@ -147,12 +147,7 @@ lapDetection1 macro JX, JY, PLAYER
         mov [lapcounter + bx], ax
 
         ; Llamar a funcion de actualizar vueltas en pantalla
-
-        mov lapX, 100
-        add lapX, ax
-        mov lapY, bx
-        paint_pixel lapX, lapY, 03h
-        jmp end_collision1
+        call display_lap_values
 
     lapCounter1:
         mov ax, PLAYER
