@@ -36,6 +36,7 @@ main_loop:
 
 ; El tiempo se ha acabado
 game_time_over:
+    call show_winner
     call exit_video_mode
     call show_end_screen
     jmp end_program

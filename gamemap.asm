@@ -30,7 +30,7 @@ generateMap_newY:
 loopp:
     ret
 
-generateMap_cont:  
+generateMap_cont:
     mov dx, xMatrix
     mov cx, yMatrix
     ;jmp getMatrixData ;;;;
@@ -85,4 +85,5 @@ paintYellowBox:
     fill_rectangle xMap, yMap, x2Map, y2Map, 0Eh
 
     jmp generateMap_cont1
+
 

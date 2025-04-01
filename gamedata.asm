@@ -11,8 +11,36 @@
     lapY dw 0
     lappixel dw 0
     lapcheckpoint dw 0, 0, 0, 0, 0
-    lapcounter dw 0, 0, 0, 0, 0
+    lapcounter dw 1, 2, 6, 4, 5
     Playeer dw 1
+
+    ; --------------------------------------------------------------------------------
+    ; variables de texto
+    ; --------------------------------------------------------------------------------
+    title_msg DB "GRAN TRAK  -  TEC EDITION$"
+    start_msg DB " Press X to start$"
+
+    game_over_msg DB "G A M E  O V E R$"
+    winner_msg DB "The winner is:$"
+
+    continue_msg DB "Press C to continue$""
+
+    player1_name DB 'Player 1$'
+    player2_name DB 'Player 2$'
+    bot1_name DB 'Bot 1$'
+    bot2_name DB 'Bot 2$'
+    bot3_name DB 'Bot 3$'
+    lap_text DB 'Laps: $'
+    buffer DB '00000$'                ; Buffer para convertir número a string
+
+    ; --------------------------------------------------------------------------------
+    ; Variables de tiempo
+    ; ---------------------------------------------------------------------------------
+    current_time DB "01:30$"    ; string para mostrar el tiempo
+    seconds DW 30               ; segundos requedidos
+    minutes DW 1                ; minutos requedidos
+    finished DB 0               ; bandera de tiempo finalizado
+    lastTick DW 0               ; tiempo de la última actualización
 
     ; --------------------------------------------------------------------------------
     ; variables
@@ -248,18 +276,3 @@
     db  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     db  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
-; Pantalla de inicio
-title_msg DB "GRAN TRAK  -  TEC EDITION$"
-start_msg DB " Press X to start$"
-
-; Pantalla de fin
-game_over_msg DB "G A M E  O V E R$"
-winner_msg DB "The winner is:$"
-
-
-; Variables de tiempo
-current_time DB "01:30$"    ; string para mostrar el tiempo
-seconds DW 30                ; segundos requedidos
-minutes DW 1                ; minutos requedidos
-finished DB 0               ; bandera de tiempo finalizado
-lastTick DW 0               ; tiempo de la última actualización

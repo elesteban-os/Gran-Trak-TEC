@@ -66,8 +66,8 @@ display_time PROC
     ; Mover cursor
     MOV AH, 02h
     MOV BH, 0  ; Página 0
-    MOV DH, 1  ; Fila 1
-    MOV DL, 73 ; Columna 73
+    MOV DH, 0  ; Fila 1
+    MOV DL, 74 ; Columna 73
     INT 10h
     
     ; Mostrar cadena de tiempo
