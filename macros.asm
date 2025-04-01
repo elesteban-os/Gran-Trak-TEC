@@ -127,118 +127,71 @@ collision1 macro JX, JY, PLAYER
 endm
 
 
-lapDetection macro JX, JY, PLAYER
-    LOCAL lapAdder, lapAnalize, CheckpointSub, lapCheckpointAdd, lapCheckpointAdd1, lapDetY, lapDet, lapCounter1, end_collision1, lapCheckpoint0
-    jmp lapDet
-    
-    lapAdder: 
-        ; Añadir checkpoint (comprobar cual fue el jugador)
-        mov ax, 0
-        mov [lapcheckpoint], ax
 
-        mov ax, [lapcounter]
+lapDetection1 macro JX, JY, PLAYER
+    LOCAL lapCounter1, lapDetY1, lapDet1, end_collision1, lapCheckpoint1, lapAdder1
+
+    jmp lapDet1
+
+    lapAdder1: 
+        mov ax, PLAYER
+        mov cx, 2
+        mul cl 
+        mov bx, ax
+        ; Añadir vuelta (comprobar cual fue el jugador)
+        mov ax, 0
+        mov [lapcheckpoint + bx], ax
+
+        mov ax, [lapcounter + bx]
         inc ax
-        mov [lapcounter], ax
+        mov [lapcounter + bx], ax
+
+        ; Llamar a funcion de actualizar vueltas en pantalla
 
         mov lapX, 100
-        mov lapY, ax
+        add lapX, ax
+        mov lapY, bx
         paint_pixel lapX, lapY, 03h
         jmp end_collision1
 
-    lapAnalize:
-       mov ax, [lapcheckpoint]
-       cmp ax, 1
-       je lapAdder
-
-       cmp ax, -1
-       je lapCheckpointAdd1
-
-       cmp ax, 0
-       je CheckpointSub
-
-       jmp end_collision1
-
-    CheckpointSub:
-        ; Restar checkpoint (comprobar cual fue el jugador)
-        mov ax, lapcheckpoint
-        sub ax, 3
-        mov lapcheckpoint, ax
-
-        jmp end_collision1
-
-    lapCheckpointAdd: ;;; verificar func
-        ; Incrementar checkpoint (comprobar cual fue el jugador)
-        mov ax, lapcheckpoint
+    lapCounter1:
+        mov ax, PLAYER
+        mov cx, 2
+        mul cl 
+        mov bx, ax
+        mov ax, [lapcheckpoint + bx]
         cmp ax, 0
-        je lapCheckpointAdd1
+        ja lapAdder1
 
         jmp end_collision1
 
-    lapCheckpointAdd1:
-        mov ax, lapcheckpoint
+    lapCheckpoint1:
+        ; Incrementar checkpoint (comprobar cual fue el jugador)
+        mov ax, PLAYER
+        mov cx, 2
+        mul cl 
+        mov bx, ax
+        mov ax, [lapcheckpoint + bx]
         inc ax
-        mov lapcheckpoint, ax
+        mov [lapcheckpoint + bx], ax
 
         jmp end_collision1
 
-    lapCheckpoint0:
-        mov ax, lapcheckpoint
-        inc ax
-        mov lapcheckpoint, ax
-
-        jmp end_collision1
-
-    lapCounter1:
-        mov bx, LAPPIXEL
-        cmp bx, 2
-        je lapAnalize
-
-        cmp bx, 1
-        je lapCheckpointAdd1
-
-        jmp end_collision1
-
-    lapDetY:
+    lapDetY1:
         cmp dx, 375
         ja lapCounter1
+
+        cmp dx, 173
+        jl lapCheckpoint1
+
         jmp end_collision1
 
-    lapDet:
+    lapDet1:
         mov cx, JX
         mov dx, JY
         ; Detectar posX
         cmp cx, 316
-        je lapDetY     
-        jmp end_collision1
-
-    end_collision1:
-        mov dx, 1
-
-endm
-
-lapDetection1 macro JX, JY, PLAYER
-
-    lapCounter1:
-        mov bx, LAPPIXEL
-        cmp bx, 2
-        je lapAnalize
-
-        cmp bx, 1
-        je lapCheckpointAdd1
-
-        jmp end_collision1
-
-    lapDetY:
-        cmp dx, 375
-        ja lapCounter1
-        jmp end_collision1
-
-    lapDet:
-        mov cx, JX
-        mov dx, JY
-        ; Detectar posX
-        cmp cx, 316
-        je lapDetY     
+        je lapDetY1     
         jmp end_collision1
 
     end_collision1:

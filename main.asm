@@ -38,6 +38,12 @@ start:
 
     call display_player_names
     call display_lap_values
+    mov Jx, 316
+    mov Jx1, 317
+    mov Jy, 109
+    mov Jy1, 173
+
+    fill_rectangle Jx, Jy, Jx1, Jy1, 08h
 
     ; Inicializar el temporizador
     call init_timer
