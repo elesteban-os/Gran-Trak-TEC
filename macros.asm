@@ -135,6 +135,7 @@ lapDetection1 macro JX, JY, PLAYER
 
     lapAdder1: 
         mov ax, PLAYER
+        sub ax, 1
         mov cx, 2
         mul cl 
         mov bx, ax
@@ -151,6 +152,7 @@ lapDetection1 macro JX, JY, PLAYER
 
     lapCounter1:
         mov ax, PLAYER
+        sub ax, 1
         mov cx, 2
         mul cl 
         mov bx, ax
@@ -163,6 +165,7 @@ lapDetection1 macro JX, JY, PLAYER
     lapCheckpoint1:
         ; Incrementar checkpoint (comprobar cual fue el jugador)
         mov ax, PLAYER
+        sub ax, 1
         mov cx, 2
         mul cl 
         mov bx, ax

@@ -18,6 +18,6 @@ def print_matrix(matrix):
         print("db ", ", ".join(map(str, row)))
 
 # Ejemplo de uso
-image_path = "circuitcreator/imagen.png"  # Reemplaza con la ruta de tu imagen
+image_path = "map/circuitcreator/imagen.png"  # Reemplaza con la ruta de tu imagen
 matrix = image_to_matrix(image_path)
 print_matrix(matrix)

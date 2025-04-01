@@ -167,7 +167,7 @@ move_player1 proc
     collision1 J1_x2, J1_y2, player_n
 
     ; Detectar vueltas
-    lapDetection1 J2_x1, J2_y1, player_n
+    lapDetection1 J1_x1, J1_y1, player_n
 
     ; Dibujar en nueva posición
     draw_rectangle J1_x1, J1_y1, J1_x2, J1_y2, 0Ah
@@ -285,6 +285,10 @@ bot1_turn:
     mov B1_dy, ax 
 
 bot1_draw:
+    ; Deteccion de vueltas
+    mov player_n, 3
+    lapDetection1 B1_x1, B1_y1, player_n
+
     ; Dibujar en nueva posición
     draw_rectangle B1_x1, B1_y1, B1_x2, B1_y2, 0Eh ;amarillo
     fill_rectangle B1_x1, B1_y1, B1_x2, B1_y2, 0Eh
@@ -345,6 +349,7 @@ move_bot2 proc
     mov ax, B2_dy
     add B2_y1, ax
     add B2_y2, ax
+
     
     jmp bot2_draw
 
@@ -359,6 +364,10 @@ bot2_turn:
     mov B2_dy, ax 
 
 bot2_draw:
+    ; Deteccion de vueltas
+    mov player_n, 4
+    lapDetection1 B2_x1, B2_y1, player_n
+
     ; Dibujar en nueva posición
     draw_rectangle B2_x1, B2_y1, B2_x2, B2_y2, 01h ;azul
     fill_rectangle B2_x1, B2_y1, B2_x2, B2_y2, 01h
@@ -420,6 +429,7 @@ move_bot3 proc
     add B3_y1, ax
     add B3_y2, ax
     
+    
     jmp bot3_draw
 
 bot3_turn:
@@ -433,6 +443,10 @@ bot3_turn:
     mov B3_dy, ax 
 
 bot3_draw:
+    ; Deteccion de vueltas
+    mov player_n, 5
+    lapDetection1 B3_x1, B3_y1, player_n
+
     ; Dibujar en nueva posición
     draw_rectangle B3_x1, B3_y1, B3_x2, B3_y2, 05h ;morado
     fill_rectangle B3_x1, B3_y1, B3_x2, B3_y2, 05h
