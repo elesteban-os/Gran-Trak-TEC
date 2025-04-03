@@ -129,7 +129,7 @@ endm
 
 
 lapDetection1 macro JX, JY, PLAYER
-    LOCAL lapCounter1, lapDetY1, lapDet1, end_collision1, lapCheckpoint1, lapAdder1
+    LOCAL lapCounter1, lapDetY1, lapDet1, end_collision1, lapCheckpoint1, lapAdder1, lapDet2X
 
     jmp lapDet1
 
@@ -184,12 +184,19 @@ lapDetection1 macro JX, JY, PLAYER
 
         jmp end_collision1
 
+    lapDet2X:
+        ; Detectar posX (menor que 318)
+        cmp cx, 318
+        jl lapDetY1
+
+        jmp end_collision1
+
     lapDet1:
         mov cx, JX
         mov dx, JY
-        ; Detectar posX
-        cmp cx, 316
-        je lapDetY1     
+        ; Detectar posX (mayor que 311)
+        cmp cx, 311
+        ja lapDet2X    
         jmp end_collision1
 
     end_collision1:
