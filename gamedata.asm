@@ -78,23 +78,23 @@
 
     ; Variables para la dirección del movimiento
     ;JUGADOR 1
-    J1_dx dw 1    ; Dirección X del jugador 1 (1 = derecha, -1 = izquierda)
+    J1_dx dw 5    ; Dirección X del jugador 1 (1 = derecha, -1 = izquierda)
     J1_dy dw 0    ; Dirección Y del jugador 1 (1 = abajo, -1 = arriba)
 
     ;JUGADOR 2
-    J2_dx dw 1    ; Dirección X del jugador 2
+    J2_dx dw 5    ; Dirección X del jugador 2
     J2_dy dw 0    ; Dirección Y del jugador 2
 
     ;BOT 1
-    B1_dx dw 1    ; Dirección X del bot
+    B1_dx dw ?    ; Dirección X del bot
     B1_dy dw 0    ; Dirección Y del bot
     
     ;BOT 2
-    B2_dx dw 1    ; Dirección X del bot
+    B2_dx dw ?    ; Dirección X del bot
     B2_dy dw 0    ; Dirección Y del bot
 
     ;BOT 3
-    B3_dx dw 1    ; Dirección X del bot
+    B3_dx dw ?    ; Dirección X del bot
     B3_dy dw 0    ; Dirección Y del bot
 
     ; Variables para deteccion colisiones
@@ -111,6 +111,14 @@
     yMatrix dw 0  
 
     track_color equ 0Fh ; Color de la pista
+
+    result dw ?         ; Variable para almacenar número random
+    min_val dw 1       ; Valor mínimo para el random (puedes cambiarlo)
+    max_val dw 5       ; Valor máximo para el random (puedes cambiarlo)
+    seed_modifier dw 0   ; Modificador para la semilla
+    seed_mod1 dw 1234h   ; Modificador para bot 1
+    seed_mod2 dw 5678h   ; Modificador para bot 2
+    seed_mod3 dw 9ABCh   ; Modificador para bot 3
 
     ; Generacion de mapa del juego con una matriz de bits 
     rows equ 160

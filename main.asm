@@ -50,6 +50,31 @@ start:
     
     ; Generar el mapa y empezar el juego
     call generateMap
+
+    ; Generar random para B1_dx
+    mov ax, [seed_mod1]
+    mov [seed_modifier], ax
+    call random_number
+    mov ax, [result]
+    mov B1_dx, ax
+    add word ptr [seed_mod1], 1111h
+
+    ; Generar random para B2_dx
+    mov ax, [seed_mod2]
+    mov [seed_modifier], ax
+    call random_number
+    mov ax, [result]
+    mov B2_dx, ax
+    add word ptr [seed_mod2], 2222h
+
+    ; Generar random para B3_dx
+    mov ax, [seed_mod3]
+    mov [seed_modifier], ax
+    call random_number
+    mov ax, [result]
+    mov B3_dx, ax
+    add word ptr [seed_mod3], 3333h
+
     jmp main_loop
 
 end start

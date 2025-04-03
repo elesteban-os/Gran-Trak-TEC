@@ -8,11 +8,11 @@ include macros.asm
 ; --------------------------------------------------------------------------------
 main_loop:
     ; Pequeño delay
-    ;push cx
-    ;mov cx, 0FFFFh
-;delay_loop:
-    ;loop delay_loop
-    ;pop cx
+    push cx
+    mov cx, 0FFFFh
+delay_loop:
+    loop delay_loop
+    pop cx
     
     ; Actualizar temporizador
     call update_timer
@@ -20,7 +20,6 @@ main_loop:
     ; Verificar si el tiempo terminó
     cmp ax, 1
     je game_time_over
-    
     ; Mover jugador 1
     call move_player1
     ; Mover jugador 2
@@ -93,41 +92,41 @@ jump_right2:
 
 move_up:
     mov J1_dx, 0    ; Sin movimiento horizontal
-    mov J1_dy, -1   ; Mover hacia arriba
+    mov J1_dy, -5   ; Mover hacia arriba
     ret
 
 move_down:
     mov J1_dx, 0    ; Sin movimiento horizontal
-    mov J1_dy, 1    ; Mover hacia abajo
+    mov J1_dy, 5    ; Mover hacia abajo
     ret
 
 move_left:
-    mov J1_dx, -1   ; Mover hacia la izquierda
+    mov J1_dx, -5   ; Mover hacia la izquierda
     mov J1_dy, 0    ; Sin movimiento vertical
     ret
 
 move_right:
-    mov J1_dx, 1    ; Mover hacia la derecha
+    mov J1_dx, 5    ; Mover hacia la derecha
     mov J1_dy, 0    ; Sin movimiento vertical
     ret
 
 move_up2:
     mov J2_dx, 0    ; Sin movimiento horizontal
-    mov J2_dy, -1   ; Mover hacia arriba
+    mov J2_dy, -5   ; Mover hacia arriba
     ret
 
 move_down2:
     mov J2_dx, 0    ; Sin movimiento horizontal
-    mov J2_dy, 1    ; Mover hacia abajo
+    mov J2_dy, 5    ; Mover hacia abajo
     ret
 
 move_left2:
-    mov J2_dx, -1   ; Mover hacia la izquierda
+    mov J2_dx, -5   ; Mover hacia la izquierda
     mov J2_dy, 0    ; Sin movimiento vertical
     ret
 
 move_right2:
-    mov J2_dx, 1    ; Mover hacia la derecha
+    mov J2_dx, 5    ; Mover hacia la derecha
     mov J2_dy, 0    ; Sin movimiento vertical
     ret
 
@@ -235,18 +234,32 @@ move_bot1 proc
     add dx, B1_y2
     shr dx, 1            ; DX = centro Y
 
-    push dx              ; Guardar dx que contiene la posición Y (porque imul modifica dx)
-                         ; el resultado de imul se guarda en dx:ax parte alta y parte baja
+    ; Calcular offset X basado en B3_dx
     mov ax, B1_dx
-    mov bx, 15
-    imul bx
+    test ax, ax          ; Verificar si B3_dx es cero
+    jz B1_check_y_offset    ; Si es cero, no añadir offset en X
+    js B1_negative_x        ; Si es negativo, saltar
+    mov ax, 15           ; Si es positivo, offset = +15
+    jmp B1_do_x
+B1_negative_x:
+    mov ax, -15          ; Si es negativo, offset = -15
+B1_do_x:
     add cx, ax           ; Añadir offset en X
 
-    mov ax, B1_dy 
-    imul bx
-    pop dx               ; Recuperar dx que contiene la posición Y
+B1_check_y_offset:
+    ; Calcular offset Y basado en B3_dy
+    mov ax, B1_dy
+    test ax, ax          ; Verificar si B3_dy es cero
+    jz B1_check_color       ; Si es cero, no añadir offset en Y
+    js B1_negative_y        ; Si es negativo, saltar
+    mov ax, 15           ; Si es positivo, offset = +15
+    jmp B1_do_y
+B1_negative_y:
+    mov ax, -15          ; Si es negativo, offset = -15
+B1_do_y:
     add dx, ax           ; Añadir offset en Y
-
+    
+B1_check_color:
     ; Guardar el color original
     mov ah, 0Dh          ; Función para leer pixel
     mov bh, 0            ; Página de video
@@ -313,18 +326,32 @@ move_bot2 proc
     add dx, B2_y2
     shr dx, 1            ; DX = centro Y
 
-    push dx              ; Guardar dx que contiene la posición Y (porque imul modifica dx)
-                         ; el resultado de imul se guarda en dx:ax parte alta y parte baja
+    ; Calcular offset X basado en B3_dx
     mov ax, B2_dx
-    mov bx, 15
-    imul bx
+    test ax, ax          ; Verificar si B3_dx es cero
+    jz B2_check_y_offset    ; Si es cero, no añadir offset en X
+    js B2_negative_x        ; Si es negativo, saltar
+    mov ax, 15           ; Si es positivo, offset = +15
+    jmp B2_do_x
+B2_negative_x:
+    mov ax, -15          ; Si es negativo, offset = -15
+B2_do_x:
     add cx, ax           ; Añadir offset en X
 
-    mov ax, B2_dy 
-    imul bx
-    pop dx               ; Recuperar dx que contiene la posición Y
+B2_check_y_offset:
+    ; Calcular offset Y basado en B3_dy
+    mov ax, B2_dy
+    test ax, ax          ; Verificar si B3_dy es cero
+    jz B2_check_color       ; Si es cero, no añadir offset en Y
+    js B2_negative_y        ; Si es negativo, saltar
+    mov ax, 15           ; Si es positivo, offset = +15
+    jmp B2_do_y
+B2_negative_y:
+    mov ax, -15          ; Si es negativo, offset = -15
+B2_do_y:
     add dx, ax           ; Añadir offset en Y
-
+    
+B2_check_color:
     ; Guardar el color original
     mov ah, 0Dh          ; Función para leer pixel
     mov bh, 0            ; Página de video
@@ -392,18 +419,32 @@ move_bot3 proc
     add dx, B3_y2
     shr dx, 1            ; DX = centro Y
 
-    push dx              ; Guardar dx que contiene la posición Y (porque imul modifica dx)
-                         ; el resultado de imul se guarda en dx:ax parte alta y parte baja
+    ; Calcular offset X basado en B3_dx
     mov ax, B3_dx
-    mov bx, 15
-    imul bx
+    test ax, ax          ; Verificar si B3_dx es cero
+    jz B3_check_y_offset    ; Si es cero, no añadir offset en X
+    js B3_negative_x        ; Si es negativo, saltar
+    mov ax, 15           ; Si es positivo, offset = +15
+    jmp B3_do_x
+B3_negative_x:
+    mov ax, -15          ; Si es negativo, offset = -15
+B3_do_x:
     add cx, ax           ; Añadir offset en X
 
-    mov ax, B3_dy 
-    imul bx
-    pop dx               ; Recuperar dx que contiene la posición Y
+B3_check_y_offset:
+    ; Calcular offset Y basado en B3_dy
+    mov ax, B3_dy
+    test ax, ax          ; Verificar si B3_dy es cero
+    jz B3_check_color       ; Si es cero, no añadir offset en Y
+    js B3_negative_y        ; Si es negativo, saltar
+    mov ax, 15           ; Si es positivo, offset = +15
+    jmp B3_do_y
+B3_negative_y:
+    mov ax, -15          ; Si es negativo, offset = -15
+B3_do_y:
     add dx, ax           ; Añadir offset en Y
-
+    
+B3_check_color:
     ; Guardar el color original
     mov ah, 0Dh          ; Función para leer pixel
     mov bh, 0            ; Página de video
@@ -418,7 +459,7 @@ move_bot3 proc
     pop ax               ; Recuperar el registro ax para mantener el modo grafico
 
     cmp bl, track_color  ; Comparar con el color de la pista
-    je bot3_turn          ; Girar si no es el color de la pista
+    je bot3_turn          ; Girar si es el color de la pista
 
     ; Mover en la dirección actual si todo está bien
     mov ax, B3_dx
@@ -453,7 +494,38 @@ bot3_draw:
     ret
 move_bot3 endp
 
+; Procedimiento para generar un número aleatorio entre min_val y max_val
+random_number proc
+    ; Usar la hora del sistema como semilla
+    mov ah, 2Ch      ; Obtener la hora del sistema
+    int 21h          ; CH=hora, CL=minuto, DH=segundo, DL=centésimas
+    
+    ; Combinar segundos y centésimas como nuestra semilla
+    mov al, dh       ; AL = segundos
+    mul dl           ; AX = segundos * centésimas
 
+    ; Añadir el valor de seed_modifier a la semilla
+    add ax, [seed_modifier]
+    inc word ptr [seed_modifier]  ; Incrementar para la siguiente llamada
+    
+    ; Obtener el resto de la división por (max - min + 1)
+    mov bx, [max_val]
+    sub bx, [min_val]
+    inc bx           ; BX = max - min + 1
+    
+    ; División sin signo: DX:AX / BX
+    xor dx, dx       ; DX = 0 para asegurar división sin signo
+    div bx           ; AX = cociente, DX = resto (0 a BX-1)
+    
+    ; Sumar el valor mínimo al resto para obtener un número entre min y max
+    mov ax, dx
+    add ax, [min_val]
+    
+    ; Guardar el resultado
+    mov [result], ax
+    
+    ret
+random_number endp
 
 ; --------------------------------------------------------------------------------
 ; finalización del programa
