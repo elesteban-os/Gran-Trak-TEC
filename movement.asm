@@ -52,13 +52,13 @@ check_keyboard:
     ; Leer la tecla
     mov ah, 0
     int 16h
-    cmp ah, 16h          ; Código para tecla 'U'
+    cmp ah, 48h          ; Código para tecla direccional arriba
     je jump_up
-    cmp ah, 24h          ; Código para tecla 'J'
+    cmp ah, 50h          ; Código para tecla direccional abajo
     je jump_down
-    cmp ah, 23h          ; Código para tecla 'H'
+    cmp ah, 4Bh          ; Código para tecla direccional izquierda
     je jump_left
-    cmp ah, 25h          ; Código para tecla 'K'
+    cmp ah, 4Dh          ; Código para tecla direccional derecha
     je jump_right
 
     cmp ah, 17          ; Código para tecla 'W'
